@@ -13,14 +13,14 @@ def clear():
 
 def show_map():
     print("""
-                    [Mirror Maze]
-                          |
-[Bazaar] -- [Liminal Space] -- [Bat Cavern] -- [Volcano]
-      |                         |
- [Meat Locker]           [Quicksand Pit]
-      |
-    [Dojo]
+        |Mirror Maze*|
+            ||             |Meat Locker* --  |Quicksand Pit*!|
+            ||                ||
+        |Liminal Space| -- |Bazaar*!|  -- |Dojo!|
+            ||
+            ||
+        |Bat Cavern*!| -- |Volcano*!|
 
-
+  - * = item, ! = enemy
   - Collect all 6 items before facing the Shadow Man
     """)

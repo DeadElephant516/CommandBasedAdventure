@@ -8,7 +8,7 @@ def battle(player, enemy_name, enemy_data):
 
     while enemy["hp"] > 0 and player["hp"] > 0:
         print(f"\nYour HP {player["hp"]} | {enemy_name.title()} HP: {enemy["hp"]}")
-        action = input("Chose an action (attack/flee)")
+        action = input("Choose an action (attack/flee)")
 
         if action == "attack":
             #PLAYER ATTACK

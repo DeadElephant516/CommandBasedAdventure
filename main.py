@@ -17,6 +17,8 @@ rooms = {
     "dojo": {"west": "bazaar", "enemy": "shadow man"}
 }
 
+healing_items = ["fig", "elderberry"]
+
 #PLAYER STATS AND ENEMIES
 player = {"hp" : 10, "atk" : 5, "def" : 5, "spd" : 2}
 enemies = {
@@ -95,6 +97,22 @@ while True:
             message = f"You picked up the {item_name}."
         else:
             message = "There's nothing like that here."
+
+    #ITEM USAGE
+    elif command.startswith("use "):
+        item_name = command.split(" ", 1)[1]
+        if item_name in inventory:
+            if item_name in healing_items:
+                heal_amount = random.randint(1,4)
+                player["hp"] += heal_amount
+                if player["hp"] >= 10:
+                    player["hp"] = 10
+                print(f"You used the {item_name} and heal {heal_amount} current HP: {player["hp"]}")
+                inventory.remove(item_name)
+            else:
+                print(f"You can't use {item_name} now")
+        else:
+            print(f"You don't have {item_name} in your inventory")
 
     # Help
     elif command in ("help", "?"):
