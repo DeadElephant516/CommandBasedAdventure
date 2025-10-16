@@ -1,4 +1,4 @@
-
+import os
 
 def prompt():
     print("Welcome to my game\n\n"
