@@ -1,18 +1,9 @@
 import os
 import random
-
+import utils
 from combat import battle
 
 
-def prompt():
-    print("Welcome to my game\n\n"
-          "You must collect all six items before fighting the boss.\n\n"
-          "Moves:\t 'go {direction}' (travel north, south, east, or west)\n"
-          "         'get {item}' (add nearby item to inventory)\n\n")
-    input("Press any key to continue...")
-
-def clear():
-    os.system('cls' if os.name == 'nt' else 'clear')
 
 # --- MAP SETUP (all lowercase for consistency) ---
 rooms = {
@@ -41,12 +32,12 @@ current_room = "liminal space"
 previous_room = ""
 message = ""
 
-clear()
-prompt()
+utils.clear()
+utils.prompt()
 
 # --- MAIN GAME LOOP ---
 while True:
-    clear()
+    utils.clear()
     print(f"You are in {current_room.title()}")
     print(f"Inventory: {inventory}")
     print("-" * 27)
@@ -107,7 +98,13 @@ while True:
 
     # Help
     elif command in ("help", "?"):
-        message = "Commands: go north/south/east/west, get {item}"
+        message = "Commands: go north/south/east/west, get {item},attack,map,inventory"
+
+    elif command == "map":
+        utils.show_map()
+
+    elif command == "inv" or command == "inventory":
+        print(inventory)
 
     # Quit
     elif command in ("quit", "exit"):
