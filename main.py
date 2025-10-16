@@ -1,4 +1,8 @@
 import os
+import random
+
+from combat import battle
+
 
 def prompt():
     print("Welcome to my game\n\n"
@@ -14,17 +18,27 @@ def clear():
 rooms = {
     "liminal space": {"north": "mirror maze", "south": "bat cavern", "east": "bazaar"},
     "mirror maze": {"south": "liminal space", "item": "crystal"},
-    "bat cavern": {"north": "liminal space", "east": "volcano", "item": "staff"},
-    "bazaar": {"west": "liminal space", "north": "meat locker", "east": "dojo", "item": "altoids"},
-    "meat locker": {"south": "bazaar", "east": "quicksand pit", "item": "fig"},
-    "quicksand pit": {"west": "meat locker", "item": "robe"},
-    "volcano": {"west": "bat cavern", "item": "elderberry"},
-    "dojo": {"west": "bazaar", "boss": "shadow man"}
+    "bat cavern": {"north": "liminal space", "east": "volcano", "item": "staff", "enemy" : "bat"},
+    "bazaar": {"west": "liminal space", "north": "meat locker", "east": "dojo", "item": "altoids", "enemy" : "rat"},
+    "meat locker": {"south": "bazaar", "east": "quicksand pit", "item": "fig", "enemy": "rat"},
+    "quicksand pit": {"west": "meat locker", "item": "robe", "enemy" : "goblin"},
+    "volcano": {"west": "bat cavern", "item": "elderberry", "enemy" : "goblin"},
+    "dojo": {"west": "bazaar", "enemy": "shadow man"}
+}
+
+#PLAYER STATS AND ENEMIES
+player = {"hp" : 10, "atk" : 5, "def" : 5, "spd" : 2}
+enemies = {
+    "bat" : {"hp" : 5, "atk" : 3, "def" : 1, "spd" : 3},
+    "rat" : {"hp": 5, "atk": 3, "def": 3, "spd" : 1},
+    "goblin" : {"hp": 7, "atk": 5, "def": 3, "spd" : 2},
+    "shadow man" : {"hp": 15, "atk" : 10, "def" : 10, "spd" : 5}
 }
 
 # --- PLAYER STATE ---
 inventory = []
 current_room = "liminal space"
+previous_room = ""
 message = ""
 
 clear()
@@ -48,15 +62,6 @@ while True:
         article = "an" if nearby_item[0].lower() in "aeiou" else "a"
         print(f"You see {article} {nearby_item}.")
 
-    # Boss encounter
-    if "boss" in rooms[current_room]:
-        boss = rooms[current_room]["boss"]
-        if len(inventory) < 6:
-            print(f"You lost a fight with {boss}.")
-            break
-        else:
-            print(f"You defeated {boss} and won the game!")
-            break
 
     # Player input
     command = input("\nEnter command:\n> ").strip().lower()
@@ -65,7 +70,28 @@ while True:
     if command.startswith("go "):
         direction = command.split(" ")[1]
         if direction in rooms[current_room]:
+            previous_room = current_room
             current_room = rooms[current_room][direction]
+
+            #COMBAT CHECK
+            if "enemy" in rooms[current_room]:
+                enemy_name = rooms[current_room]["enemy"]
+
+                #SHADOW MAN CHECK
+                if enemy_name == "shadow man" and len(inventory) < 6:
+                    print(f"The {enemy_name} blocks your path your are not ready to fight this battle yet\nYou should explore more")
+                    current_room = previous_room
+                else:
+                    result = battle(player, enemy_name, enemies[enemy_name])
+                    if result == False:
+                        print("Game Over")
+                        break
+                    elif result == "fled":
+                        print("You return to the previous room to regroup.")
+                        current_room = previous_room
+                    else:
+                        del rooms[current_room]["enemy"]
+
         else:
             message = "You can't go that way."
 
