@@ -8,24 +8,24 @@ from combat import battle
 # --- MAP SETUP (all lowercase for consistency) ---
 rooms = {
     "liminal space": {"north": "mirror maze", "south": "bat cavern", "east": "bazaar"},
-    "mirror maze": {"south": "liminal space", "item": "crystal"},
+    "mirror maze": {"south": "liminal space", "item": "robe"},
     "bat cavern": {"north": "liminal space", "east": "volcano", "item": "staff", "enemy" : "bat"},
     "bazaar": {"west": "liminal space", "north": "meat locker", "east": "dojo", "item": "altoids", "enemy" : "rat"},
     "meat locker": {"south": "bazaar", "east": "quicksand pit", "item": "fig", "enemy": "rat"},
-    "quicksand pit": {"west": "meat locker", "item": "robe", "enemy" : "goblin"},
+    "quicksand pit": {"west": "meat locker", "item": "crystal", "enemy" : "goblin"},
     "volcano": {"west": "bat cavern", "item": "elderberry", "enemy" : "goblin"},
     "dojo": {"west": "bazaar", "enemy": "shadow man"}
 }
 
-healing_items = ["fig", "elderberry"]
+healing_items = ["fig", "elderberry", "essence of life"]
 
 #PLAYER STATS AND ENEMIES
 player = {"hp" : 10, "atk" : 5, "def" : 5, "spd" : 2}
 enemies = {
-    "bat" : {"hp" : 5, "atk" : 3, "def" : 1, "spd" : 3},
-    "rat" : {"hp": 5, "atk": 3, "def": 3, "spd" : 1},
-    "goblin" : {"hp": 7, "atk": 5, "def": 3, "spd" : 2},
-    "shadow man" : {"hp": 15, "atk" : 10, "def" : 10, "spd" : 5}
+    "bat" : {"hp" : 5, "atk" : 2, "def" : 1, "spd" : 5, "max_dice" : 2},
+    "rat" : {"hp": 5, "atk": 2, "def": 3, "spd" : 1, "max_dice" : 2},
+    "goblin" : {"hp": 7, "atk": 3, "def": 3, "spd" : 2, "max_dice" : 3},
+    "shadow man" : {"hp": 15, "atk" : 10, "def" : 10, "spd" : 5, "max_dice" : 4}
 }
 
 # --- PLAYER STATE ---
@@ -62,16 +62,20 @@ while True:
     # Movement
     if command.startswith("go "):
         direction = command.split(" ")[1]
-        if direction in rooms[current_room]:
+        if direction == "back":
+            current_room = previous_room
+
+        elif direction in rooms[current_room]:
             previous_room = current_room
             current_room = rooms[current_room][direction]
+
 
             #COMBAT CHECK
             if "enemy" in rooms[current_room]:
                 enemy_name = rooms[current_room]["enemy"]
 
                 #SHADOW MAN CHECK
-                if enemy_name == "shadow man" and len(inventory) < 6:
+                if enemy_name == "shadow man" and "crystal" in inventory:
                     print(f"The {enemy_name} blocks your path your are not ready to fight this battle yet\nYou should explore more")
                     current_room = previous_room
                 else:
@@ -128,6 +132,7 @@ while True:
     elif command in ("quit", "exit"):
         print("Thanks for playing!")
         break
+
 
     # Invalid input
     else:

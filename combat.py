@@ -12,14 +12,26 @@ def battle(player, enemy_name, enemy_data):
 
         if action == "attack":
             #PLAYER ATTACK
-            player_damage = max(1,  player["atk"] - enemy["def"])
-            enemy["hp"] -= player_damage
+            player_dice = random.randint(1,6)
+            attack_roll = random.randint(1,20) + player["spd"]
+            dodge_roll = random.randint(1,20) + enemy["spd"]
+            if attack_roll >= dodge_roll:
+                player_damage = max(1,  player["atk"] - enemy["def"]) + player_dice
+                enemy["hp"] -= player_damage
+                print(f"You hit the {enemy_name} for {player_damage} damage!")
+            else:
+                print(f"The {enemy_name} dodged your attack")
             #ENEMY ATTACK
-            enemy_damage = max(1, enemy["atk"] - player["def"])
-            player["hp"] -= enemy_damage
-            #FEEDBACK
-            print(f"You hit the {enemy_name} for {player_damage} damage!")
-            print(f"The {enemy_name} hits you for {enemy_damage} damage!")
+            enemy_dice = random.randint(1,enemy["max_dice"])
+            attack_roll = random.randint(1,20) + enemy["spd"]
+            dodge_roll = random.randint(1,20) + player["spd"]
+            if attack_roll >= dodge_roll:
+                enemy_damage = max(1, enemy["atk"] - player["def"]) + enemy_dice
+                player["hp"] -= enemy_damage
+                print(f"The {enemy_name} hits you for {enemy_damage} damage!")
+            else:
+                print(f"You dodged {enemy_name} attack")
+                #EXCHANGE RESULT
             print(f"\nAfter the exchange:\nYour HP: {player['hp']} | {enemy_name.title()} HP: {enemy['hp']}")
 
             #CHECK RESULT
