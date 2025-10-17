@@ -22,7 +22,21 @@ rooms = {
 healing_items = ["fig", "elderberry", "essence of life"]
 
 #PLAYER STATS AND ENEMIES
-player = {"hp" : 10, "max_hp" : 10, "atk" : 5, "def" : 5, "spd" : 2}
+player = {"max_hp" : 10,
+          "hp" : 10,
+          "atk" : 5,
+          "def" : 5,
+          "spd" : 2,
+          "equipped" : {
+              "weapon" : None,
+              "armor" : None,
+              "helmet" : None,
+              "gloves" : None,
+              "boots" : None
+            }
+          }
+
+
 player["hp"] = player["max_hp"]
 
 enemies = {
@@ -112,9 +126,21 @@ while True:
         message = use.use_item(player,inventory,item_name)
         print(message)
 
+    #EQUIP-UNEQUIP
+    elif command.startswith("equip "):
+        item_name = command.split(" ",1)[1]
+        message = use.equip_item(player,inventory,item_name)
+        print(message)
+        print(player)
+    elif command.startswith("unequip "):
+        item_name = command.split(" ",1)[1]
+        message = use.unequip_item(player,inventory,item_name)
+        print(message)
+        print(player)
+
     # Help
     elif command in ("help", "?"):
-        message = "Commands: go north/south/east/west, get {item},attack,map,inventory"
+        message = "Commands: go north/south/east/west, get {item},attack,map,inventory, equip {item}, unequip {item}, quit"
 
     elif command == "map":
         utils.show_map()

@@ -22,12 +22,18 @@ items = {
         },
         "dagger": {
             "type" : "weapon",
+            "max_hp_bonus" : 0,
             "atk_bonus" : 2,
+            "def_bonus": 0,
+            "spd_bonus" : 0,
             "description" : "sharp like a twisted mind, a great fit to such world"
         },
         "wearable skin" : {
             "type" : "armor",
+            "max_hp_bonus" : 0,
+            "atk_bonus" : 0,
             "def_bonus" : 2,
+            "spd_bonus" : 0,
             "description" : "an insult to the fallen, a praise for those who continue"
         },
         "altoids" : {
