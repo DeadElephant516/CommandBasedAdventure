@@ -2,14 +2,16 @@ import os
 import random
 import utils
 from combat import battle
+import items
+import use
 
 
 
 # --- MAP SETUP (all lowercase for consistency) ---
 rooms = {
     "liminal space": {"north": "mirror maze", "south": "bat cavern", "east": "bazaar"},
-    "mirror maze": {"south": "liminal space", "item": "robe"},
-    "bat cavern": {"north": "liminal space", "east": "volcano", "item": "staff", "enemy" : "bat"},
+    "mirror maze": {"south": "liminal space", "item": "wearable skin"},
+    "bat cavern": {"north": "liminal space", "east": "volcano", "item": "dagger", "enemy" : "bat"},
     "bazaar": {"west": "liminal space", "north": "meat locker", "east": "dojo", "item": "altoids", "enemy" : "rat"},
     "meat locker": {"south": "bazaar", "east": "quicksand pit", "item": "fig", "enemy": "rat"},
     "quicksand pit": {"west": "meat locker", "item": "crystal", "enemy" : "goblin"},
@@ -20,12 +22,14 @@ rooms = {
 healing_items = ["fig", "elderberry", "essence of life"]
 
 #PLAYER STATS AND ENEMIES
-player = {"hp" : 10, "atk" : 5, "def" : 5, "spd" : 2}
+player = {"hp" : 10, "max_hp" : 10, "atk" : 5, "def" : 5, "spd" : 2}
+player["hp"] = player["max_hp"]
+
 enemies = {
     "bat" : {"hp" : 5, "atk" : 1, "def" : 1, "spd" : 5, "max_dice" : 2},
-    "rat" : {"hp": 5, "atk": 1, "def": 3, "spd" : 1, "max_dice" : 2},
+    "rat" : {"hp": 5, "atk": 1, "def": 1, "spd" : 1, "max_dice" : 2},
     "goblin" : {"hp": 7, "atk": 2, "def": 3, "spd" : 2, "max_dice" : 3},
-    "shadow man" : {"hp": 15, "atk" : 6, "def" : 10, "spd" : 5, "max_dice" : 4}
+    "shadow man" : {"hp": 15, "atk" : 6, "def" : 5, "spd" : 5, "max_dice" : 4}
 }
 
 # --- PLAYER STATE ---
@@ -75,7 +79,7 @@ while True:
                 enemy_name = rooms[current_room]["enemy"]
 
                 #SHADOW MAN CHECK
-                if enemy_name == "shadow man" and "crystal" in inventory:
+                if enemy_name == "shadow man" and "crystal" not in inventory:
                     print(f"The {enemy_name} blocks your path your are not ready to fight this battle yet\nYou should explore more")
                     current_room = previous_room
                 else:
@@ -105,18 +109,8 @@ while True:
     #ITEM USAGE
     elif command.startswith("use "):
         item_name = command.split(" ", 1)[1]
-        if item_name in inventory:
-            if item_name in healing_items:
-                heal_amount = random.randint(2,6)
-                player["hp"] += heal_amount
-                if player["hp"] >= 10:
-                    player["hp"] = 10
-                print(f"You used the {item_name} and heal {heal_amount} current HP: {player["hp"]}")
-                inventory.remove(item_name)
-            else:
-                print(f"You can't use {item_name} now")
-        else:
-            print(f"You don't have {item_name} in your inventory")
+        message = use.use_item(player,inventory,item_name)
+        print(message)
 
     # Help
     elif command in ("help", "?"):
