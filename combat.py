@@ -1,7 +1,9 @@
 import random
+from use import use_item
 
 
-def battle(player, enemy_name, enemy_data):
+
+def battle(player, enemy_name, enemy_data, inv):
     """Handles fighting returns True if player wins returns False if player dies or flees"""
     enemy = enemy_data.copy()
     print(f"\nA {enemy_name} appears")
@@ -48,6 +50,12 @@ def battle(player, enemy_name, enemy_data):
         elif action == "flee":
             print("You escape the danger with a cost")
             return "fled"
+
+        elif action.startswith("use "):
+            item_name = action.split(" ",1)[1]
+            message = use_item(player,inv,item_name)
+            print(message)
+
         else:
             print("invalid command")
 
