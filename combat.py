@@ -24,9 +24,24 @@ def handle_guard(tm):
             tm["player"]["def"] = 0
             print("Your guard fades away, you lose your stance")
 
+def handle_bluff(tm):
+    if tm["player"]["bluff_rounds"] > 0:
+        tm["player"]["bluff_rounds"] -= 1
+        if tm["player"]["bluff_rounds"] == 0:
+            tm["player"]["spd"] = 0
+            tm["enemy"]["spd"] = 0
+            print("Your bluff fades, enemy recovers")
+
 def reset_guard(tm):
     tm["player"]["def"] = 0
     tm["player"]["guard_rounds"] = 0
+
+def reset_bluff(tm):
+    tm["player"]["spd"] = 0
+    tm["player"]["bluff_rounds"] = 0
+    tm["enemy"]["spd"] = 0
+
+
 
 def battle(player, enemy_name, enemy_data, inv):
     """Handles fighting, returns True if player wins, False if player dies or flees"""
@@ -34,6 +49,7 @@ def battle(player, enemy_name, enemy_data, inv):
     print(f"\nA {enemy_name} appears")
 
     reset_guard(temp_mods)
+    reset_bluff(temp_mods)
 
     while enemy["hp"] > 0 and player["hp"] > 0:
         print(f"\nYour HP {player['hp']} | {enemy_name.title()} HP: {enemy['hp']}")
@@ -43,8 +59,8 @@ def battle(player, enemy_name, enemy_data, inv):
         if action == "attack":
             # PLAYER ATTACK
             player_dice = random.randint(1,6)
-            player_attack_roll = random.randint(1,6) + player["spd"]
-            enemy_dodge_roll = random.randint(1,6) + enemy["spd"]
+            player_attack_roll = random.randint(1,6) + player["spd"] + temp_mods["player"]["spd"]
+            enemy_dodge_roll = random.randint(1,6) + enemy["spd"] + temp_mods["enemy"]["spd"]
             if player_attack_roll >= enemy_dodge_roll:
                 player_damage = max(1, player["atk"] - enemy["def"]  + player_dice)
                 enemy["hp"] -= player_damage
@@ -54,8 +70,8 @@ def battle(player, enemy_name, enemy_data, inv):
 
             # ENEMY ATTACK
             enemy_dice = random.randint(1, enemy["max_dice"])
-            enemy_attack_roll = random.randint(1,6) + enemy["spd"]
-            player_dodge_roll = random.randint(1,6) + player["spd"]
+            enemy_attack_roll = random.randint(1,6) + enemy["spd"] + temp_mods["enemy"]["spd"]
+            player_dodge_roll = random.randint(1,6) + player["spd"] + temp_mods["player"]["spd"]
             if enemy_attack_roll >= player_dodge_roll:
                 enemy_damage = max(1, enemy["atk"] - player["def"]  + enemy_dice)
                 player["hp"] -= enemy_damage
@@ -74,7 +90,7 @@ def battle(player, enemy_name, enemy_data, inv):
             effective_rounds = temp_mods["player"]["guard_rounds"] - 1
             effective_def = player["def"] + temp_mods["player"]["def"]
             enemy_dice = random.randint(1, enemy["max_dice"])
-            print(f"you guard for {temp_mods['player']['def']} extra points of def for {effective_rounds}")
+            print(f"you guard for {temp_mods['player']['def']} extra points of def for {effective_rounds} rounds")
 
             if guard_dice == 6:
                 counter_damage = max(1, player["atk"] - enemy["def"] + player_dice)
@@ -87,6 +103,30 @@ def battle(player, enemy_name, enemy_data, inv):
                     print(f"The {enemy_name} hits you for {enemy_damage} damage!")
                 else:
                     print(f"You blocked the attack with your guard!")
+
+        elif action == "bluff":
+            player_dice = random.randint(1,6)
+            temp_mods["player"]["spd"] = 1
+            temp_mods["player"]["bluff_rounds"] = 3 if player_dice != 6 else 4
+            effective_rounds = temp_mods["player"]["bluff_rounds"] - 1
+            temp_mods["enemy"]["spd"] = -2 if player_dice != 6 else 3
+            print(f"You bluff! Your speed rises by 1, enemy speed drops by {temp_mods["enemy"]["spd"]} for {effective_rounds} rounds")
+
+            # ENEMY ATTACK
+            enemy_dice = random.randint(1, enemy["max_dice"])
+            enemy_attack_roll = random.randint(1,6) + enemy["spd"] + temp_mods["enemy"]["spd"]
+            player_dodge_roll = random.randint(1,6) + player["spd"] + temp_mods["player"]["spd"]
+            if enemy_attack_roll >= player_dodge_roll:
+                enemy_damage = max(1, enemy["atk"] - player["def"]  + enemy_dice)
+                player["hp"] -= enemy_damage
+                print(f"The {enemy_name} hits you for {enemy_damage} damage!")
+            else:
+                print(f"You dodged {enemy_name} attack")
+
+            # AFTER EXCHANGE
+            print(f"\nAfter the exchange:\nYour HP: {player['hp']} | {enemy_name.title()} HP: {enemy['hp']}")
+
+
 
         elif action == "flee":
             print("You escape the danger with a cost")
@@ -101,6 +141,8 @@ def battle(player, enemy_name, enemy_data, inv):
             print("invalid command")
 
         handle_guard(temp_mods)
+        handle_bluff(temp_mods)
+
         print(
             f"HP:{player['hp']} | DEF:{player['def']}+{temp_mods['player']['def']}({temp_mods['player']['guard_rounds']}r) = {player['def'] + temp_mods['player']['def']} |"
             f" ATK+:{temp_mods['player']['atk']} | SPD+:{temp_mods['player']['spd']}")

@@ -25,6 +25,7 @@ def equip_item(player,inv,item_name):
         return f"{item_name} does not exist"
 
     item = items[item_name]
+
     slot = item["type"]
     old_item = player["equipped"].get(slot)
     if old_item:
