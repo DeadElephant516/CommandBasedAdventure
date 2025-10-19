@@ -35,6 +35,8 @@ def equip_item(player,inv,item_name):
     for stat in ["max_hp", "atk", "def", "spd"]:
         player[stat] += item[f"{stat}_bonus"]
 
+    return f"You equipped {item_name}"
+
 
 
 def unequip_item(player,inv,item_name):

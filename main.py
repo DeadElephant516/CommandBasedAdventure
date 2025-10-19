@@ -23,10 +23,11 @@ while True:
         message = ""
 
     # Show nearby item
-    if "item" in rooms[current_room]:
-        nearby_item = rooms[current_room]["item"]
-        article = "an" if nearby_item[0].lower() in "aeiou" else "a"
-        print(f"You see {article} {nearby_item}.")
+    if "items" in rooms[current_room] and rooms[current_room]["items"]:
+        nearby_items = rooms[current_room]["items"]
+        for nearby_item in nearby_items:
+            article = "an" if nearby_item[0].lower() in "aeiou" else "a"
+            print(f"You see {article} {nearby_item}.")
 
 
     # Player input
@@ -36,7 +37,8 @@ while True:
     if command.startswith("go "):
         direction = command.split(" ")[1]
         if direction == "back":
-            current_room = previous_room
+            if previous_room != "":
+                current_room = previous_room
 
         elif direction in rooms[current_room]:
             previous_room = current_room
@@ -68,9 +70,9 @@ while True:
     # Item pickup
     elif command.startswith("get "):
         item_name = command.split(" ", 1)[1]
-        if "item" in rooms[current_room] and item_name == rooms[current_room]["item"]:
+        if "items" in rooms[current_room] and item_name in rooms[current_room]["items"]:
             inventory.append(item_name)
-            del rooms[current_room]["item"]
+            rooms[current_room]["items"].remove(item_name)
             message = f"You picked up the {item_name}."
         else:
             message = "There's nothing like that here."
