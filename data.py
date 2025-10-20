@@ -1,14 +1,33 @@
 
 # --- MAP SETUP (all lowercase for consistency) ---
 rooms = {
-    "liminal space": {"north": "mirror maze", "south": "bat cavern", "east": "bazaar"},
-    "mirror maze": {"south": "liminal space", "items": ["wearable skin"]},
-    "bat cavern": {"north": "liminal space", "east": "volcano", "items": ["dagger"], "enemy" : "bat"},
-    "bazaar": {"west": "liminal space", "north": "meat locker", "east": "dojo", "items": ["altoids"], },
-    "meat locker": {"south": "bazaar", "east": "quicksand pit", "items": ["fig"], "enemy": "rat"},
-    "quicksand pit": {"west": "meat locker", "items": ["crystal", "elderberry"], "enemy" : "goblin"},
-    "volcano": {"west": "bat cavern", "items": ["elderberry"], "enemy" : "goblin"},
-    "dojo": {"west": "bazaar", "enemy": "shadow man"}
+    "liminal space":
+        {"exits" : {"north": "mirror maze", "south": "bat cavern", "east": "bazaar"}},
+    "mirror maze":
+        {"exits": {"south": "liminal space"},
+         "items": ["wearable skin"]},
+    "bat cavern":
+        {"exits": {"north": "liminal space", "east": "volcano"},
+         "items": ["dagger"],
+         "enemy" : "bat"},
+    "bazaar":
+        {"exits" : {"west": "liminal space", "north": "meat locker", "east": "dojo"},
+         "items": ["altoids"], },
+    "meat locker":
+        {"exits" : {"south": "bazaar", "east": "quicksand pit"},
+         "items": ["fig"],
+         "enemy": "rat"},
+    "quicksand pit":
+        {"exits" : {"west": "meat locker"},
+         "items": ["crystal", "elderberry"],
+         "enemy" : "goblin"},
+    "volcano":
+        {"exits" : {"west": "bat cavern"},
+         "items": ["elderberry"],
+         "enemy" : "goblin"},
+    "dojo":
+        {"exits" : {"west": "bazaar"},
+         "enemy": "shadow man"}
 }
 
 healing_items = ["fig", "elderberry", "essence of life"]

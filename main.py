@@ -13,7 +13,8 @@ utils.prompt()
 # --- MAIN GAME LOOP ---
 while True:
     utils.clear()
-    print(f"You are in {current_room.title()}")
+    available_exits = ", ".join(rooms[current_room]["exits"].keys())
+    print(f"You are in {current_room.title()}\nExits: {available_exits}")
     print(f"Inventory: {inventory}")
     print("-" * 27)
 
@@ -40,9 +41,9 @@ while True:
             if previous_room != "":
                 current_room = previous_room
 
-        elif direction in rooms[current_room]:
+        elif direction in rooms[current_room]["exits"]:
             previous_room = current_room
-            current_room = rooms[current_room][direction]
+            current_room = rooms[current_room]["exits"][direction]
 
 
             #COMBAT CHECK
