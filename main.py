@@ -68,14 +68,10 @@ while True:
             message = "You can't go that way."
 
     # Item pickup
-    elif command.startswith("get "):
+    elif command.startswith("get ") or command.startswith("take "):
         item_name = command.split(" ", 1)[1]
-        if "items" in rooms[current_room] and item_name in rooms[current_room]["items"]:
-            inventory.append(item_name)
-            rooms[current_room]["items"].remove(item_name)
-            message = f"You picked up the {item_name}."
-        else:
-            message = "There's nothing like that here."
+        message = use.pick_up_item(rooms,current_room,item_name,inventory)
+
 
     #ITEM USAGE
     elif command.startswith("use "):
@@ -87,12 +83,12 @@ while True:
     elif command.startswith("equip "):
         item_name = command.split(" ",1)[1]
         message = use.equip_item(player,inventory,item_name)
-        print(message)
+        #print(message)
         print(player)
     elif command.startswith("unequip "):
         item_name = command.split(" ",1)[1]
         message = use.unequip_item(player,inventory,item_name)
-        print(message)
+        #print(message)
         print(player)
 
     # Help

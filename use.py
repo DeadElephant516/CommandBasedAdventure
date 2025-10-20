@@ -1,5 +1,17 @@
 import random
+
+from data import inventory
 from items import items
+
+
+def pick_up_item(rooms,current_room,item_name,inv):
+    if "items" in rooms[current_room] and item_name in rooms[current_room]["items"]:
+        inv.append(item_name)
+        rooms[current_room]["items"].remove(item_name)
+        return f"You picked up the {item_name}."
+    else:
+        return "There's nothing like that here."
+
 
 def use_item(player,inv,item_name):
     if item_name not in inv:
