@@ -42,7 +42,8 @@ while True:
 
 
     # Player input
-    command = input("\nEnter command:\n> ").strip().lower()
+    #command = input("\nEnter command:\n> ").strip().lower()
+    command = ' '.join(input().strip().lower().split())
 
     # Movement
     if command.startswith("go "):
