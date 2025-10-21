@@ -4,7 +4,17 @@ import utils
 from combat import battle
 import items
 import use
-from data import rooms,player,enemies,inventory,message,healing_items,current_room,previous_room
+from game import  game
+
+
+rooms = game["rooms"]
+inventory = game["inventory"]
+player = game["player"]
+enemies = game["enemies"]
+current_room = game["current_room"]
+previous_room = game["previous_room"]
+message = game["message"]
+
 
 
 utils.clear()
@@ -111,3 +121,10 @@ while True:
     # Invalid input
     else:
         message = "Invalid command."
+
+    game["current_room"] = current_room
+    game["previous_room"] = previous_room
+    game["message"] = message
+    game["inventory"] = inventory
+    game["player"] = player
+    game["rooms"] = rooms
