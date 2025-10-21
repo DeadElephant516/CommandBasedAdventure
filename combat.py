@@ -62,7 +62,7 @@ def battle(player, enemy_name, enemy_data, inv):
             player_attack_roll = random.randint(1,6) + player["spd"] + temp_mods["player"]["spd"]
             enemy_dodge_roll = random.randint(1,6) + enemy["spd"] + temp_mods["enemy"]["spd"]
             if player_attack_roll >= enemy_dodge_roll:
-                player_damage = max(1, player["atk"] - enemy["def"]  + player_dice)
+                player_damage = max(1, player["atk"] - enemy["def"]  + player_dice//2)
                 enemy["hp"] -= player_damage
                 print(f"You hit the {enemy_name} for {player_damage} damage!")
             else:
@@ -73,7 +73,7 @@ def battle(player, enemy_name, enemy_data, inv):
             enemy_attack_roll = random.randint(1,6) + enemy["spd"] + temp_mods["enemy"]["spd"]
             player_dodge_roll = random.randint(1,6) + player["spd"] + temp_mods["player"]["spd"]
             if enemy_attack_roll >= player_dodge_roll:
-                enemy_damage = max(1, enemy["atk"] - player["def"]  + enemy_dice)
+                enemy_damage = max(1, enemy["atk"] - player["def"]  + enemy_dice//2)
                 player["hp"] -= enemy_damage
                 print(f"The {enemy_name} hits you for {enemy_damage} damage!")
             else:
@@ -106,18 +106,23 @@ def battle(player, enemy_name, enemy_data, inv):
 
         elif action == "bluff":
             player_dice = random.randint(1,6)
-            temp_mods["player"]["spd"] = 1
-            temp_mods["player"]["bluff_rounds"] = 3 if player_dice != 6 else 4
-            effective_rounds = temp_mods["player"]["bluff_rounds"] - 1
-            temp_mods["enemy"]["spd"] = -2 if player_dice != 6 else 3
-            print(f"You bluff! Your speed rises by 1, enemy speed drops by {temp_mods["enemy"]["spd"]} for {effective_rounds} rounds")
+            if player_dice > 2:
+                temp_mods["player"]["spd"] = 1
+                temp_mods["player"]["bluff_rounds"] = 3 if player_dice != 6 else 4
+                effective_rounds = temp_mods["player"]["bluff_rounds"] - 1
+                temp_mods["enemy"]["spd"] = -2 if player_dice != 6 else 3
+                print(f"You bluff! Your speed rises by 1, enemy speed drops by {temp_mods["enemy"]["spd"]} for {effective_rounds} rounds")
+            else:
+                print("Your bluff failed! Enemy sees through your move.")
+                temp_mods["player"]["spd"] = 0
+                temp_mods["enemy"]["spd"] = 0
 
             # ENEMY ATTACK
             enemy_dice = random.randint(1, enemy["max_dice"])
             enemy_attack_roll = random.randint(1,6) + enemy["spd"] + temp_mods["enemy"]["spd"]
             player_dodge_roll = random.randint(1,6) + player["spd"] + temp_mods["player"]["spd"]
             if enemy_attack_roll >= player_dodge_roll:
-                enemy_damage = max(1, enemy["atk"] - player["def"]  + enemy_dice)
+                enemy_damage = max(1, enemy["atk"] - player["def"]  + enemy_dice//2)
                 player["hp"] -= enemy_damage
                 print(f"The {enemy_name} hits you for {enemy_damage} damage!")
             else:
@@ -145,7 +150,7 @@ def battle(player, enemy_name, enemy_data, inv):
 
         print(
             f"HP:{player['hp']} | DEF:{player['def']}+{temp_mods['player']['def']}({temp_mods['player']['guard_rounds']}r) = {player['def'] + temp_mods['player']['def']} |"
-            f" ATK+:{temp_mods['player']['atk']} | SPD+:{temp_mods['player']['spd']}")
+            f" ATK+:{temp_mods['player']['atk']} | SPD+:{temp_mods['player']['spd']}({temp_mods['player']['bluff_rounds']}r)")
 
         # --- check battle result each turn ---
         if player["hp"] <= 0 and enemy["hp"] <= 0:
