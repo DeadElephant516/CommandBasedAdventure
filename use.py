@@ -1,6 +1,4 @@
 import random
-
-from data import inventory
 from items import items
 
 
