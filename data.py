@@ -52,14 +52,14 @@ player = {"max_hp" : 10,
 player["hp"] = player["max_hp"]
 
 enemies = {
-    "bat" : {"hp" : 5, "atk" : 1, "def" : 1, "spd" : 3, "max_dice" : 2},
-    "rat" : {"hp": 5, "atk": 1, "def": 1, "spd" : 1, "max_dice" : 2},
-    "goblin" : {"hp": 7, "atk": 2, "def": 3, "spd" : 2, "max_dice" : 3, "gold": random.randint(5,10)},
+    "bat" : {"hp" : 5, "atk" : 1, "def" : 1, "spd" : 3, "max_dice" : 2, "drop": {"bat wing" : (1,2)} },
+    "rat" : {"hp": 5, "atk": 1, "def": 1, "spd" : 1, "max_dice" : 2, "drop" : {"rat tail": (0,1)} },
+    "goblin" : {"hp": 7, "atk": 2, "def": 3, "spd" : 2, "max_dice" : 3, "drop": {"gold": (5,10)} },
     "shadow man" : {"hp": 15, "atk" : 7, "def" : 5, "spd" : 5, "max_dice" : 4}
 }
 
 # --- PLAYER STATE ---
-inventory = []
+inventory = {}
 current_room = "liminal space"
 previous_room = ""
 message = ""

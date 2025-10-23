@@ -114,7 +114,7 @@ def battle(player, enemy_name, enemy_data, inv):
                 print(f"Your guard triggered a counter attack! You deal {counter_damage} to {enemy_name}")
             else:
                 enemy_damage = max(0, (enemy["atk"] + enemy_dice) - effective_def)
-                if enemy_damage > 0:
+                if enemy_damage >= 0:
                     player["hp"] -= enemy_damage
                     print(f"The {enemy_name} hits you for {enemy_damage} damage!")
                 else:

@@ -4,7 +4,7 @@ from items import items
 
 def pick_up_item(rooms,current_room,item_name,inv):
     if "items" in rooms[current_room] and item_name in rooms[current_room]["items"]:
-        inv.append(item_name)
+        inv[item_name] = inv.get(item_name,0) + 1
         rooms[current_room]["items"].remove(item_name)
         return f"You picked up the {item_name}."
     else:
@@ -12,7 +12,7 @@ def pick_up_item(rooms,current_room,item_name,inv):
 
 
 def use_item(player,inv,item_name):
-    if item_name not in inv:
+    if item_name not in inv or inv[item_name] <= 0:
         return f"You don't have {item_name}."
 
     if item_name not in items:
@@ -25,18 +25,20 @@ def use_item(player,inv,item_name):
         player["hp"] += heal_amount
         if player["hp"] > player["max_hp"]:
             player["hp"] = player["max_hp"]
-        inv.remove(item_name)
+        inv[item_name] -= 1
+        if inv[item_name] == 0:
+            del inv[item_name]
         return f"You used {item_name} and healed for {heal_amount} | Current HP: {player['hp']}"
 
 def equip_item(player,inv,item_name):
-    if item_name not in inv:
+    if item_name not in inv or inv[item_name] <= 0:
         return f"You don't have {item_name} in your belongings"
     if item_name not in items:
         return f"{item_name} does not exist"
 
     item = items[item_name]
-
     slot = item["type"]
+
     old_item = player["equipped"].get(slot)
     if old_item:
         unequip_item(player,inv,old_item)
@@ -45,6 +47,10 @@ def equip_item(player,inv,item_name):
 
     for stat in ["max_hp", "atk", "def", "spd"]:
         player[stat] += item[f"{stat}_bonus"]
+
+    inv[item_name] -= 1
+    if inv[item_name] == 0:
+        del inv[item_name]
 
     return f"You equipped {item_name}"
 
@@ -65,8 +71,7 @@ def unequip_item(player,inv,item_name):
 
     player["equipped"][slot] = None
 
-    if item_name not in inv:
-        inv.append(item_name)
+    inv[item_name] = inv.get(item_name, 0) + 1
 
     return f"You unequipped {item_name}"
 
