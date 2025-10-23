@@ -17,6 +17,10 @@ temp_mods = {
     },
 }
 
+def roll_dice(a,b):
+    dice = random.randint(a,b)
+    return dice
+
 def handle_guard(tm):
     if tm["player"]["guard_rounds"] > 0:
         tm["player"]["guard_rounds"] -= 1
@@ -42,6 +46,24 @@ def reset_bluff(tm):
     tm["enemy"]["spd"] = 0
 
 
+def enemy_attack(enemy_name, enemy, player, tm):
+    """Handles enemy attacking the player. Returns damage dealt."""
+    player_dice = roll_dice(1, 6)
+    enemy_dice = roll_dice(1, enemy["max_dice"])
+
+    enemy_attack_roll = enemy_dice + enemy["spd"] + tm["enemy"]["spd"]
+    player_dodge_roll = player_dice + player["spd"] + tm["player"]["spd"]
+    effective_def = player["def"] + tm["player"]["def"]
+    if enemy_attack_roll >= player_dodge_roll:
+        damage = max(1, enemy["atk"] - effective_def + enemy_dice // 2)
+        player["hp"] -= damage
+        print(f"The {enemy_name} hits you for {damage} damage!")
+    else:
+        damage = 0
+        print(f"You dodged {enemy_name} attack")
+
+    return damage
+
 
 def battle(player, enemy_name, enemy_data, inv):
     """Handles fighting, returns True if player wins, False if player dies or flees"""
@@ -59,8 +81,8 @@ def battle(player, enemy_name, enemy_data, inv):
 
         if action == "attack":
             # PLAYER ATTACK
-            player_dice = random.randint(1,6)
-            enemy_dice = random.randint(1,6)
+            player_dice = roll_dice(1,6)
+            enemy_dice = roll_dice(1,enemy["max_dice"])
             player_attack_roll = player_dice//2 + player["spd"] + temp_mods["player"]["spd"]
             enemy_dodge_roll = enemy_dice//2 + enemy["spd"] + temp_mods["enemy"]["spd"]
             if player_attack_roll >= enemy_dodge_roll:
@@ -70,16 +92,8 @@ def battle(player, enemy_name, enemy_data, inv):
             else:
                 print(f"The {enemy_name} dodged your attack")
 
-            # ENEMY ATTACK
-            enemy_dice = random.randint(1, enemy["max_dice"])
-            enemy_attack_roll = random.randint(1,6) + enemy["spd"] + temp_mods["enemy"]["spd"]
-            player_dodge_roll = random.randint(1,6) + player["spd"] + temp_mods["player"]["spd"]
-            if enemy_attack_roll >= player_dodge_roll:
-                enemy_damage = max(1, enemy["atk"] - player["def"]  + enemy_dice//2)
-                player["hp"] -= enemy_damage
-                print(f"The {enemy_name} hits you for {enemy_damage} damage!")
-            else:
-                print(f"You dodged {enemy_name} attack")
+            #ENEMY ATTACK
+            enemy_attack(enemy_name,enemy,player,temp_mods)
 
             # AFTER EXCHANGE
             print(f"\nAfter the exchange:\nYour HP: {player['hp']} | {enemy_name.title()} HP: {enemy['hp']}")
@@ -107,7 +121,7 @@ def battle(player, enemy_name, enemy_data, inv):
                     print(f"You blocked the attack with your guard!")
 
         elif action == "bluff":
-            player_dice = random.randint(1,6)
+            player_dice = roll_dice(1,6)
             if player_dice > 2:
                 temp_mods["player"]["spd"] = 1
                 temp_mods["player"]["bluff_rounds"] = 3 if player_dice != 6 else 4
@@ -120,15 +134,7 @@ def battle(player, enemy_name, enemy_data, inv):
                 temp_mods["enemy"]["spd"] = 0
 
             # ENEMY ATTACK
-            enemy_dice = random.randint(1, enemy["max_dice"])
-            enemy_attack_roll = random.randint(1,6) + enemy["spd"] + temp_mods["enemy"]["spd"]
-            player_dodge_roll = random.randint(1,6) + player["spd"] + temp_mods["player"]["spd"]
-            if enemy_attack_roll >= player_dodge_roll:
-                enemy_damage = max(1, enemy["atk"] - player["def"]  + enemy_dice//2)
-                player["hp"] -= enemy_damage
-                print(f"The {enemy_name} hits you for {enemy_damage} damage!")
-            else:
-                print(f"You dodged {enemy_name} attack")
+            enemy_attack(enemy_name,enemy,player,temp_mods)
 
             # AFTER EXCHANGE
             print(f"\nAfter the exchange:\nYour HP: {player['hp']} | {enemy_name.title()} HP: {enemy['hp']}")

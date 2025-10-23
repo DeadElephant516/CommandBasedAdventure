@@ -55,7 +55,7 @@ enemies = {
     "bat" : {"hp" : 5, "atk" : 1, "def" : 1, "spd" : 3, "max_dice" : 2},
     "rat" : {"hp": 5, "atk": 1, "def": 1, "spd" : 1, "max_dice" : 2},
     "goblin" : {"hp": 7, "atk": 2, "def": 3, "spd" : 2, "max_dice" : 3, "gold": random.randint(5,10)},
-    "shadow man" : {"hp": 15, "atk" : 6, "def" : 5, "spd" : 5, "max_dice" : 4}
+    "shadow man" : {"hp": 15, "atk" : 7, "def" : 5, "spd" : 5, "max_dice" : 4}
 }
 
 # --- PLAYER STATE ---
