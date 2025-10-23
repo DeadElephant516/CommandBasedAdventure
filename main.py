@@ -57,25 +57,6 @@ while True:
             current_room = rooms[current_room]["exits"][direction]
 
 
-            #COMBAT CHECK
-            if "enemy" in rooms[current_room]:
-                enemy_name = rooms[current_room]["enemy"]
-
-                #SHADOW MAN CHECK
-                if enemy_name == "shadow man" and "crystal" not in inventory:
-                    print(f"The {enemy_name} blocks your path your are not ready to fight this battle yet\nYou should explore more")
-                    current_room = previous_room
-                else:
-                    result = battle(player, enemy_name, enemies[enemy_name], inventory)
-                    if result == False:
-                        print("Game Over")
-                        break
-                    elif result == "fled":
-                        print("You return to the previous room to regroup.")
-                        current_room = previous_room
-                    else:
-                        del rooms[current_room]["enemy"]
-
         else:
             message = "You can't go that way."
 
@@ -105,7 +86,7 @@ while True:
 
     # Help
     elif command in ("help", "?"):
-        message = "Commands: go north/south/east/west, get {item},attack,map,inventory, equip {item}, unequip {item}, quit"
+        message = "Commands: go north/south/east/west, use {item}, get {item},map,inventory, equip {item}, unequip {item}, quit, Combat: attack, bluff, guard, flee, use {item}"
 
     elif command == "map":
         utils.show_map()
@@ -122,6 +103,28 @@ while True:
     # Invalid input
     else:
         message = "Invalid command."
+
+
+
+    # COMBAT CHECK
+    if "enemy" in rooms[current_room]:
+        enemy_name = rooms[current_room]["enemy"]
+
+        # SHADOW MAN CHECK
+        if enemy_name == "shadow man" and "crystal" not in inventory:
+            print(
+                f"The {enemy_name} blocks your path your are not ready to fight this battle yet\nYou should explore more")
+            current_room = previous_room
+        else:
+            result = battle(player, enemy_name, enemies[enemy_name], inventory)
+            if result == False:
+                print("Game Over")
+                break
+            elif result == "fled":
+                print("You return to the previous room to regroup.")
+                current_room = previous_room
+            else:
+                del rooms[current_room]["enemy"]
 
     game["current_room"] = current_room
     game["previous_room"] = previous_room

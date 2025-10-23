@@ -60,8 +60,9 @@ def battle(player, enemy_name, enemy_data, inv):
         if action == "attack":
             # PLAYER ATTACK
             player_dice = random.randint(1,6)
-            player_attack_roll = random.randint(1,6) + player["spd"] + temp_mods["player"]["spd"]
-            enemy_dodge_roll = random.randint(1,6) + enemy["spd"] + temp_mods["enemy"]["spd"]
+            enemy_dice = random.randint(1,6)
+            player_attack_roll = player_dice//2 + player["spd"] + temp_mods["player"]["spd"]
+            enemy_dodge_roll = enemy_dice//2 + enemy["spd"] + temp_mods["enemy"]["spd"]
             if player_attack_roll >= enemy_dodge_roll:
                 player_damage = max(1, player["atk"] - enemy["def"]  + player_dice//2)
                 enemy["hp"] -= player_damage

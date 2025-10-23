@@ -1,3 +1,4 @@
+import random
 
 # --- MAP SETUP (all lowercase for consistency) ---
 rooms = {
@@ -15,7 +16,7 @@ rooms = {
          "items": ["altoids"], },
     "meat locker":
         {"exits" : {"south": "bazaar", "east": "quicksand pit"},
-         "items": ["fig"],
+         "items": ["fig", "hermes feet"],
          "enemy": "rat"},
     "quicksand pit":
         {"exits" : {"west": "meat locker"},
@@ -53,7 +54,7 @@ player["hp"] = player["max_hp"]
 enemies = {
     "bat" : {"hp" : 5, "atk" : 1, "def" : 1, "spd" : 3, "max_dice" : 2},
     "rat" : {"hp": 5, "atk": 1, "def": 1, "spd" : 1, "max_dice" : 2},
-    "goblin" : {"hp": 7, "atk": 2, "def": 3, "spd" : 2, "max_dice" : 3},
+    "goblin" : {"hp": 7, "atk": 2, "def": 3, "spd" : 2, "max_dice" : 3, "gold": random.randint(5,10)},
     "shadow man" : {"hp": 15, "atk" : 6, "def" : 5, "spd" : 5, "max_dice" : 4}
 }
 

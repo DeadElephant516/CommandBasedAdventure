@@ -39,5 +39,13 @@ items = {
         "altoids" : {
             "type" : "consumable",
             "description" : "savor a taste while you can, it won't be always the same"
+        },
+        "hermes feet" : {
+            "type" : "boots",
+            "max_hp_bonus": 0,
+            "atk_bonus": 0,
+            "def_bonus": 0,
+            "spd_bonus": 2,
+            "description": "seems like they were attacked to someone's body"
         }
 }
