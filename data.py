@@ -44,7 +44,7 @@ player = {"max_hp" : 10,
               "armor" : None,
               "helmet" : None,
               "gloves" : None,
-              "boots" : None
+              "boots" : None,
             }
           }
 

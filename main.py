@@ -5,7 +5,7 @@ from combat import battle
 import items
 import use
 from game import  game
-
+from classes import character_classes
 
 rooms = game["rooms"]
 inventory = game["inventory"]
@@ -19,6 +19,32 @@ message = game["message"]
 
 utils.clear()
 utils.prompt()
+
+#CLASS SELECTION
+utils.clear()
+print("CHOOSE YOUR ORIGIN\n")
+print("In this wretched place, your past defines your survival:\n")
+for class_name, class_data in character_classes.items():
+    print(f"- {class_name.upper()}: {class_data['description']}")
+while True:
+    chosen_class = input("\nWhat is your origin? ").strip().lower()
+    if chosen_class in character_classes:
+        class_data = character_classes[chosen_class]
+
+        # Apply stats using our clean function
+        player = utils.apply_class_stats(player, class_data)
+
+        # Add starting gear to inventory
+        for item in class_data["starting_gear"]:
+            inventory[item] = inventory.get(item, 0) + 1
+
+        print(f"\nYou are {chosen_class.upper()}.")
+        print(f"HP:{player['hp']} ATK:{player['atk']} DEF:{player['def']} SPD:{player['spd']}")
+        print(f"Combat skills: {', '.join(player['combat_actions'])}")
+        input("\nPress any key to face what awaits...")
+        break
+    else:
+        print("Unknown origin. Choose:", list(character_classes.keys()))
 
 # --- MAIN GAME LOOP ---
 while True:

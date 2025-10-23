@@ -24,3 +24,11 @@ def show_map():
   - * = item, ! = enemy
   - Collect all 6 items before facing the Shadow Man
     """)
+
+# === ADD THIS FUNCTION ===
+def apply_class_stats(player, class_data):
+    """Apply class stats and return updated player"""
+    stats_to_copy = ["max_hp", "hp", "atk", "def", "spd", "combat_actions"]
+    for stat in stats_to_copy:
+        player[stat] = class_data[stat]
+    return player

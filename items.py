@@ -47,5 +47,21 @@ items = {
             "def_bonus": 0,
             "spd_bonus": 2,
             "description": "seems like they were attacked to someone's body"
+        },
+        "shiv": {
+            "type" : "weapon",
+            "max_hp_bonus" : 0,
+            "atk_bonus": 2,
+            "def_bonus": 0,
+            "spd_bonus" : 0,
+            "description": "forged in prison"
+        },
+        "dead man's head": {
+            "type": "quest",
+            "max_hp_bonus" : 0,
+            "atk_bonus": 0,
+            "def_bonus": 0,
+            "spd_bonus" : 0,
+            "description": "A severed head that seems to whisper to the dead"
         }
 }

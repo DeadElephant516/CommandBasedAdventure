@@ -94,9 +94,15 @@ def battle(player, enemy_name, enemy_data, inv):
 
     while enemy["hp"] > 0 and player["hp"] > 0:
         print(f"\nYour HP {player['hp']} | {enemy_name.title()} HP: {enemy['hp']}")
-        action = input("Choose an action (attack/flee)")
-        action = action.lower()
+        # === MODIFIED: Show only available actions based on class ===
+        available_actions = player.get("combat_actions", ["attack", "flee"])
+        print(f"Available actions: {', '.join(available_actions)}")
+        action = input("Choose action: ").strip().lower()
 
+        # === MODIFIED: Check if action is allowed for this class ===
+        if action not in available_actions:
+            print("You cannot do that! Choose from your available actions.")
+            continue
 
         if action == "attack":
             # PLAYER ATTACK
@@ -132,8 +138,8 @@ def battle(player, enemy_name, enemy_data, inv):
                 enemy["hp"] -= counter_damage
                 print(f"Your guard triggered a counter attack! You deal {counter_damage} to {enemy_name}")
             else:
-                enemy_damage = max(0, (enemy["atk"] + enemy_dice) - effective_def)
-                if enemy_damage >= 0:
+                enemy_damage = max(1, (enemy["atk"] + enemy_dice) - effective_def)
+                if enemy_damage >= 1:
                     player["hp"] -= enemy_damage
                     print(f"The {enemy_name} hits you for {enemy_damage} damage!")
                 else:
