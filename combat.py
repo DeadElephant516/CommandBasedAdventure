@@ -65,6 +65,25 @@ def enemy_attack(enemy_name, enemy, player, tm):
     return damage
 
 
+def handle_drops(enemy, inv):
+    """Handle enemy drops and show what was gained."""
+    drops_text = []
+
+    if "drop" not in enemy:
+        return "It dropped nothing."
+
+    for item, (min_amt, max_amt) in enemy["drop"].items():
+        amount = random.randint(min_amt, max_amt)
+        if amount > 0:
+            inv[item] = inv.get(item, 0) + amount
+            drops_text.append(f"{amount} {item}{'s' if amount > 1 else ''}")
+
+    if drops_text:
+        return "You got " + ", ".join(drops_text) + "."
+    else:
+        return "It dropped nothing."
+
+
 def battle(player, enemy_name, enemy_data, inv):
     """Handles fighting, returns True if player wins, False if player dies or flees"""
     enemy = enemy_data.copy()
@@ -166,6 +185,7 @@ def battle(player, enemy_name, enemy_data, inv):
             return False
         elif enemy["hp"] <= 0:
             print(f"You've slain the {enemy_name}")
+            print(handle_drops(enemy,inv))
             return True
         elif player["hp"] <= 0:
             print("You Died")
