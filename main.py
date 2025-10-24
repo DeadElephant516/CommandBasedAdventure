@@ -1,7 +1,7 @@
 import os
 import random
 import utils
-from combat import battle
+from combat_v2 import battle
 import items
 import use
 from game import  game
@@ -105,6 +105,25 @@ while True:
     else:
         message = "Invalid command."
 
+    # COMBAT CHECK (only if player moved or took action)
+    if "enemy" in rooms[current_room]:
+        enemy_name = rooms[current_room]["enemy"]
+
+        # SHADOW MAN CHECK
+        if enemy_name == "shadow man" and "crystal" not in inventory:
+            message = f"The {enemy_name} blocks your path. You need a crystal to face him."
+            current_room = previous_room
+        else:
+            result = battle(player, enemy_name, enemies[enemy_name], inventory)
+            if result is False:
+                print("Game Over")
+                break
+            elif result == "fled":
+                message = "You retreat to safety."
+                current_room = previous_room
+            else:
+                del rooms[current_room]["enemy"]
+                message = f"You defeated the {enemy_name}!"
 
 
     game["current_room"] = current_room
