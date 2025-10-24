@@ -31,7 +31,6 @@ rooms = {
          "enemy": "shadow man"}
 }
 
-healing_items = ["fig", "elderberry", "essence of life"]
 
 #PLAYER STATS AND ENEMIES
 player_base = {"max_hp" : 10,

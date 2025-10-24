@@ -90,7 +90,7 @@ while True:
         message = "Commands: go north/south/east/west, use {item}, get {item},map,inventory, equip {item}, unequip {item}, quit, Combat: attack, bluff, guard, flee, use {item}"
 
     elif command == "map":
-        utils.show_map()
+        message = utils.show_map()
 
     elif command == "inv" or command == "inventory":
         print(inventory)
@@ -100,10 +100,10 @@ while True:
         print("Thanks for playing!")
         break
 
-
     # Invalid input
     else:
         message = "Invalid command."
+
 
     # COMBAT CHECK (only if player moved or took action)
     if "enemy" in rooms[current_room]:

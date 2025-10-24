@@ -1,5 +1,6 @@
 import random
 from use import use_item
+from effects import EFFECT_MAP
 
 #COMBAT STATE
 combat_state = {
@@ -10,10 +11,12 @@ combat_state = {
         "player" : {"def_bonus":0,
                     "spd_bonus":0,
                     "rounds_left":0,
+                    "active_actions" : {},
                     },
         "enemy": {"def_bonus": 0,
                   "spd_bonus": 0,
                   "rounds_left":0,
+                  "active_actions" : {},
                     }
     }
 }
@@ -27,6 +30,20 @@ def calculate_initiative(player,enemy):
     enemy_initiative = enemy["spd"] + combat_state["temp_effects"]["enemy"]["spd_bonus"] + roll_dice(6)
     return player_initiative >= enemy_initiative
 
+def check_effects(player,enemy):
+    messages = []
+    should_attack = True
+
+    for effect_name, effect_data in EFFECT_MAP.items():
+        if effect_data["check"](player,enemy,combat_state):
+            message = effect_data["apply"](player,enemy)
+            messages.append(message)
+            if effect_data["interrupt"]:
+                should_attack = False
+
+    return "\n".join(messages), should_attack
+
+
 def player_attack(player,enemy):
     damage_roll = roll_dice(6)
     damage = max(1, player["atk"] - enemy["def"] + damage_roll//2)
@@ -34,6 +51,13 @@ def player_attack(player,enemy):
     return f"You strike for {damage} damage"
 
 def enemy_attack(player,enemy):
+    effect_message, attack_proceeds = check_effects(player,enemy)
+    if effect_message:
+        print(effect_message)
+
+    if not attack_proceeds:
+        return ""
+
     damage_roll = roll_dice(6)
     damage = max(1, enemy["atk"] - player["def"] + damage_roll//2)
     player["hp"] -= damage
@@ -43,6 +67,7 @@ def guard(player,enemy):
     guard_bonus = random.randint(2,4)
     combat_state["temp_effects"]["player"]["def_bonus"] = guard_bonus
     combat_state["temp_effects"]["player"]["rounds_left"] = 2
+    combat_state["temp_effects"]["player"]["active_actions"]["guard"] = {"rounds_left": 2}
     return f"You take a defensive stance! + {guard_bonus} DEF for 2 rounds"
 
 def bluff(player,enemy):
@@ -51,6 +76,7 @@ def bluff(player,enemy):
         combat_state["temp_effects"]["player"]["rounds_left"] = 2
         combat_state["temp_effects"]["enemy"]["spd_bonus"] = -2
         combat_state["temp_effects"]["enemy"]["rounds_left"] = 2
+        combat_state["temp_effects"]["player"]["active_actions"]["bluff"] = {"rounds_left": 2}
         return "Your bluff confuses the enemy, Their speed drops by 2! You gain +1 spd"
     return "Failure, the enemy sees through your bluff"
 
@@ -86,6 +112,15 @@ def update_combat_effects():
                 combat_state["temp_effects"][entity]["def_bonus"] = 0
                 combat_state["temp_effects"][entity]["spd_bonus"] = 0
 
+        actions_to_remove = []
+        for action_name, action_data in combat_state["temp_effects"][entity]["active_actions"].items():
+            action_data["rounds_left"] -= 1
+            if action_data["rounds_left"] <= 0:
+                actions_to_remove.append(action_name)
+
+        # Clean up expired actions
+        for action_name in actions_to_remove:
+            del combat_state["temp_effects"][entity]["active_actions"][action_name]
 
 def display_combat_status(player, enemy_name, enemy):
     """Show clear combat UI"""
@@ -99,6 +134,10 @@ def display_combat_status(player, enemy_name, enemy):
     if combat_state["temp_effects"]["player"]["spd_bonus"]:
         player_effects.append(f"+{combat_state['temp_effects']['player']['spd_bonus']} SPD")
 
+    active_actions = list(combat_state["temp_effects"]["player"]["active_actions"].keys())
+    for action in active_actions:
+        player_effects.append(action.title())
+
     if player_effects:
         print(f"Active effects: {', '.join(player_effects)}")
 
@@ -110,8 +149,20 @@ def battle(player, enemy_name, enemy_data, inventory):
 
     # Reset combat state for new battle
     combat_state.update({"round": 1, "player_turn": True, "message": ""})
-    combat_state["temp_effects"] = {"player": {"def_bonus": 0, "spd_bonus": 0, "rounds_left": 0},
-                                    "enemy": {"def_bonus": 0, "spd_bonus": 0, "rounds_left": 0}}
+    combat_state["temp_effects"] = {
+        "player": {
+            "def_bonus": 0,
+            "spd_bonus": 0,
+            "rounds_left": 0,
+            "active_actions": {}
+        },
+        "enemy": {
+            "def_bonus": 0,
+            "spd_bonus": 0,
+            "rounds_left": 0,
+            "active_actions": {}
+        }
+    }
 
     print(f"\n⚔️ A {enemy_name} confronts you! ⚔️")
 

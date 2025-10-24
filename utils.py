@@ -1,7 +1,6 @@
 import os
 
 
-
 def prompt():
     print("Welcome to my game\n\n"
           "Moves:\t 'go {direction}' (travel north, south, east, or west)\n"
@@ -13,7 +12,7 @@ def clear():
 
 
 def show_map():
-    print("""
+    return ("""
         |Mirror Maze*|
             ||             |Meat Locker* --  |Quicksand Pit*!|
             ||                ||
