@@ -198,7 +198,7 @@ def battle(player, enemy_name, enemy_data, inventory):
             print(enemy_attack(player, enemy))
 
             # Player turn if still alive
-            if player["hp"] > 0:
+            if player["hp"] > 0 and enemy["hp"] > 0:
                 print(f"\n--- YOUR TURN ---")
                 available_actions = player.get("combat_actions", ["attack", "flee"])
                 print(f"Actions: {', '.join(available_actions)}")
