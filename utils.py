@@ -4,7 +4,6 @@ import os
 
 def prompt():
     print("Welcome to my game\n\n"
-          "You must collect all six items before fighting the boss.\n\n"
           "Moves:\t 'go {direction}' (travel north, south, east, or west)\n"
           "         'get {item}' (add nearby item to inventory)\n\n")
     input("Press any key to continue...")

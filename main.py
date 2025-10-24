@@ -133,26 +133,3 @@ while True:
     game["player"] = player
     game["rooms"] = rooms
 
-
-
-
-#####LEGACY COMBAT########
-    # # COMBAT CHECK
-    # if "enemy" in rooms[current_room]:
-    #     enemy_name = rooms[current_room]["enemy"]
-    #
-    #     # SHADOW MAN CHECK
-    #     if enemy_name == "shadow man" and "crystal" not in inventory:
-    #         print(
-    #             f"The {enemy_name} blocks your path your are not ready to fight this battle yet\nYou should explore more")
-    #         current_room = previous_room
-    #     else:
-    #         result = battle(player, enemy_name, enemies[enemy_name], inventory)
-    #         if result == False:
-    #             print("Game Over")
-    #             break
-    #         elif result == "fled":
-    #             print("You return to the previous room to regroup.")
-    #             current_room = previous_room
-    #         else:
-    #             del rooms[current_room]["enemy"]
