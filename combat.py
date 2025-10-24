@@ -51,8 +51,8 @@ def enemy_attack(enemy_name, enemy, player, tm):
     player_dice = roll_dice(1, 6)
     enemy_dice = roll_dice(1, enemy["max_dice"])
 
-    enemy_attack_roll = enemy_dice + enemy["spd"] + tm["enemy"]["spd"]
-    player_dodge_roll = player_dice + player["spd"] + tm["player"]["spd"]
+    enemy_attack_roll = enemy_dice//2 + enemy["spd"] + tm["enemy"]["spd"]
+    player_dodge_roll = player_dice//2 + player["spd"] + tm["player"]["spd"]
     effective_def = player["def"] + tm["player"]["def"]
     if enemy_attack_roll >= player_dodge_roll:
         damage = max(1, enemy["atk"] - effective_def + enemy_dice // 2)

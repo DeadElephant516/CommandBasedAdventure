@@ -34,7 +34,7 @@ rooms = {
 healing_items = ["fig", "elderberry", "essence of life"]
 
 #PLAYER STATS AND ENEMIES
-player = {"max_hp" : 10,
+player_base = {"max_hp" : 10,
           "hp" : 10,
           "atk" : 5,
           "def" : 5,
@@ -48,8 +48,6 @@ player = {"max_hp" : 10,
             }
           }
 
-
-player["hp"] = player["max_hp"]
 
 enemies = {
     "bat" : {"hp" : 5, "atk" : 1, "def" : 1, "spd" : 3, "max_dice" : 2, "drop": {"bat wing" : (0,2)} },

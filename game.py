@@ -2,7 +2,7 @@ import data
 
 game = {
     "rooms" : data.rooms,
-    "player" : data.player,
+    "player" : data.player_base.copy(),
     "enemies" : data.enemies,
     "inventory" : data.inventory,
     "current_room" : data.current_room,
