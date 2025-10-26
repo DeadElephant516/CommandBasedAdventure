@@ -113,6 +113,9 @@ while True:
     if "enemy" in rooms[current_room]:
         enemy_name = rooms[current_room]["enemy"]
 
+        if enemy_name is None:
+            continue
+
         # SHADOW MAN CHECK
         if enemy_name == "shadow man" and "crystal" not in inventory:
             message = f"The {enemy_name} blocks your path. You need a crystal to face him."
