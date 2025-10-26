@@ -31,6 +31,9 @@ while True:
     utils.clear()
     available_exits = ", ".join(rooms[current_room]["exits"].keys())
     print(f"You are in {current_room.title()}\nExits: {available_exits}")
+    room_data = rooms[current_room]
+    print(f"== {current_room.title()} ==")
+    print(room_data["description"])
     print(f"Inventory: {inventory}")
     print("-" * 27)
 

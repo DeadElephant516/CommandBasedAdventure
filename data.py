@@ -2,33 +2,69 @@ import random
 
 # --- MAP SETUP (all lowercase for consistency) ---
 rooms = {
-    "liminal space":
-        {"exits" : {"north": "mirror maze", "south": "bat cavern", "east": "bazaar"}},
-    "mirror maze":
-        {"exits": {"south": "liminal space"},
-         "items": ["wearable skin"]},
-    "bat cavern":
-        {"exits": {"north": "liminal space", "east": "volcano"},
-         "items": ["dagger"],
-         "enemy" : "bat"},
-    "bazaar":
-        {"exits" : {"west": "liminal space", "north": "meat locker", "east": "dojo"},
-         "items": ["altoids"], },
-    "meat locker":
-        {"exits" : {"south": "bazaar", "east": "quicksand pit"},
-         "items": ["fig", "hermes feet"],
-         "enemy": "rat"},
-    "quicksand pit":
-        {"exits" : {"west": "meat locker"},
-         "items": ["crystal", "elderberry"],
-         "enemy" : "goblin"},
-    "volcano":
-        {"exits" : {"west": "bat cavern"},
-         "items": ["elderberry"],
-         "enemy" : "goblin"},
-    "dojo":
-        {"exits" : {"west": "bazaar"},
-         "enemy": "shadow man"}
+    "liminal space": {
+        "exits": {"north": "mirror maze", "south": "bat cavern", "east": "bazaar"},
+        "description": "A space between spaces. The air hums with static possibility.\n"
+                       "Flickering lights reveal endless corridors that shift when not observed.\n"
+                       "You feel both nowhere and everywhere at once.",
+        "items": [],
+        "enemy": None
+    },
+    "mirror maze": {
+        "exits": {"south": "liminal space"},
+        "description": "Countless mirrors reflect endless versions of yourself.\n"
+                       "Some reflections move independently, mocking your gestures.\n"
+                       "The air is cold and the sound of breaking glass echoes from unseen distances.",
+        "items": ["wearable skin"],
+        "enemy": None
+    },
+    "bat cavern": {
+        "exits": {"north": "liminal space", "east": "volcano"},
+        "description": "The ceiling drips with sleeping bat-things that are not quite bats.\n"
+                       "Their leathery wings twitch in unison. The floor is carpeted in bones picked clean.\n"
+                       "A faint chittering fills the oppressive dark.",
+        "items": ["dagger"],
+        "enemy": "bat"
+    },
+    "bazaar": {
+        "exits": {"west": "liminal space", "north": "meat locker", "east": "dojo"},
+        "description": "Stalls made of bone and stretched skin display wares no living being should sell.\n"
+                       "Shadowy figures haggle over prices paid in memories. The air smells of incense and decay.\n",
+        "items": ["altoids"],
+        "enemy": None
+    },
+    "meat locker": {
+        "exits": {"south": "bazaar", "east": "quicksand pit"},
+        "description": "Hooks dangling from chains hold carcasses that still twitch.\n"
+                       "The walls weep crimson, and the floor is slick with things better left unexamined.\n"
+                       "A low moaning vibrates through the meat.",
+        "items": ["fig", "hermes feet"],
+        "enemy": "rat"
+    },
+    "quicksand pit": {
+        "exits": {"west": "meat locker"},
+        "description": "The ground shifts uneasily, pulling at your feet.\n"
+                       "Pale hands occasionally breach the surface before sinking back into the hungry earth.\n"
+                       "The air is thick with the scent of wet grave.",
+        "items": ["crystal", "elderberry"],
+        "enemy": "goblin"
+    },
+    "volcano": {
+        "exits": {"west": "bat cavern"},
+        "description": "Molten rock flows in veins of orange and black.\n"
+                       "The heat is unnatural, carrying whispers of ancient fury.\n"
+                       "Ash falls like snow, coating everything in gray funeral shroud.",
+        "items": ["elderberry"],
+        "enemy": "goblin"
+    },
+    "dojo": {
+        "exits": {"west": "bazaar"},
+        "description": "Tatami mats float in perfect formation above an endless void.\n"
+                       "Training dummies made of shadow practice forms without masters.\n"
+                       "This is where final tests are administered.",
+        "items": [],
+        "enemy": "shadow man"
+    }
 }
 
 
