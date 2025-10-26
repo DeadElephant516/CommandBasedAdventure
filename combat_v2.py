@@ -66,17 +66,17 @@ def enemy_attack(player,enemy):
 def guard(player,enemy):
     guard_bonus = random.randint(2,4)
     combat_state["temp_effects"]["player"]["def_bonus"] = guard_bonus
-    combat_state["temp_effects"]["player"]["rounds_left"] = 2
-    combat_state["temp_effects"]["player"]["active_actions"]["guard"] = {"rounds_left": 2}
-    return f"You take a defensive stance! + {guard_bonus} DEF for 2 rounds"
+    combat_state["temp_effects"]["player"]["rounds_left"] = 3
+    combat_state["temp_effects"]["player"]["active_actions"]["guard"] = {"rounds_left": 3}
+    return f"You take a defensive stance! + {guard_bonus} DEF for {combat_state['temp_effects']['player']['rounds_left']} rounds"
 
 def bluff(player,enemy):
     if roll_dice(6) > 2:
         combat_state["temp_effects"]["player"]["spd_bonus"] = 1
-        combat_state["temp_effects"]["player"]["rounds_left"] = 2
+        combat_state["temp_effects"]["player"]["rounds_left"] = 3
         combat_state["temp_effects"]["enemy"]["spd_bonus"] = -2
-        combat_state["temp_effects"]["enemy"]["rounds_left"] = 2
-        combat_state["temp_effects"]["player"]["active_actions"]["bluff"] = {"rounds_left": 2}
+        combat_state["temp_effects"]["enemy"]["rounds_left"] = 3
+        combat_state["temp_effects"]["player"]["active_actions"]["bluff"] = {"rounds_left": 3}
         return "Your bluff confuses the enemy, Their speed drops by 2! You gain +1 spd"
     return "Failure, the enemy sees through your bluff"
 
@@ -188,7 +188,7 @@ def battle(player, enemy_name, enemy_data, inventory):
             print(result)
 
             # Enemy turn if still alive
-            if enemy["hp"] > 0:
+            if enemy["hp"] > 0 and player["hp"] > 0:
                 print(f"\n--- {enemy_name.upper()}'S TURN ---")
                 print(enemy_attack(player, enemy))
 
